@@ -1,0 +1,36 @@
+<!-- public/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wikipedia Writer Info</title>
+</head>
+<body>
+    <h1>Wikipedia Writer Info</h1>
+    <form id="writerForm">
+        <label for="writerName">Enter Writer's Name:</label>
+        <input type="text" id="writerName" name="writerName" required>
+        <button type="submit">Get Writer Info</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('writerForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const writerName = document.getElementById('writerName').value;
+
+            fetch(`/api/writer/${encodeURIComponent(writerName)}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('result').innerHTML = `<p>${data.writerInfo || 'Writer not found'}</p>`;
+                })
+                .catch(error => {
+                    console.error(error);
+                    document.getElementById('result').innerHTML = '<p>Error fetching writer info</p>';
+                });
+        });
+    </script>
+</body>
+</html>
